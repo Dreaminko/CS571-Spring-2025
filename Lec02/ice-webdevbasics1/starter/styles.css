@@ -1,0 +1,11 @@
+/* This is where your CSS goes! */
+
+#author {
+    font-size: 15px;
+}
+
+.bold {
+    font-weight: 1000;
+    color: red;
+    border-color: red;
+}

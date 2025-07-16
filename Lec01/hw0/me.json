@@ -1,0 +1,14 @@
+{
+    "name": {
+        "first": "Dream",
+        "last": "Ink"
+    },
+    
+    "fromWisconsin": false,
+    "numCredits": 18,
+    "major": "Software Engineer",
+    "interests": [
+        "Programming",
+        "Playing Video Games"
+    ]
+}
