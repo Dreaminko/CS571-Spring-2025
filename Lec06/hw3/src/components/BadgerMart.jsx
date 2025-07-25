@@ -6,7 +6,16 @@ export default function BadgerMart(props) {
     const [feature, setFeature] = useState();
 
     useEffect(() => {
-        // TODO I should fetch and setFeature here!
+        fetch("https://cs571.org/rest/s25/hw3/featured-item", {
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId()
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            setFeature(data)
+        })
     }, []);
 
     return <div>
