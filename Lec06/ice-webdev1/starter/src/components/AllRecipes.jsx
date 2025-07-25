@@ -14,8 +14,22 @@ const RECIPE_PASTA = JSON.parse(`{"name":"Classic Spaghetti Carbonara","author":
 const RECIPE_CHILI = JSON.parse(`{"name":"7-Ingredient Chili","author":"OpenAI","img":{"location":"https://raw.githubusercontent.com/CS571-S25/ice-api-static-content/main/chili.png","description":"A delicious bowl of chili!"},"keywords":["hearty","flavorful","simple","comforting"],"reviews":[{"txt":"A burst of warmth and flavor in every spoonful; simple yet irresistible!","rating":5},{"txt":"The perfect blend of spice and comfort, an easy go-to chili recipe.","rating":4},{"txt":"Loved the hearty texture and rich taste - a new family favorite!","rating":5},{"txt":"Quick, flavorful, and satisfying - this chili hits all the right notes!","rating":5}],"ingredients":{"ground beef":{"amount":1,"unit":"lb"},"kidney beans":{"amount":15,"unit":"oz","misc":"drained and rinsed"},"diced tomatoes":{"amount":14.5,"unit":"oz","misc":"with juice"},"chili powder":{"amount":2,"unit":"tablespoon"},"onion":{"amount":1,"misc":"diced"},"bell pepper":{"amount":1,"misc":"diced"},"ground cumin":{"amount":1,"unit":"teaspoon"}},"recipe":["Cook Meat with Vegetables: In a large pot, cook the ground beef, diced onion, and diced bell pepper over medium heat until the meat is no longer pink and the vegetables are softened.","Add Remaining Ingredients: To the pot, add the kidney beans, diced tomatoes (with their juice), chili powder, ground cumin, and salt to taste. If the chili is too thick, add a little water to reach your desired consistency.","Simmer: Bring the mixture to a boil, then reduce the heat and simmer for about 20-30 minutes to allow the flavors to meld. Stir occasionally.","Serve: Enjoy your chili as is, or with toppings like shredded cheese or sour cream."]}`);
 
 export default function AllRecipes(props) {
+    const [pizza, setPizza] = useState()
+
+    useEffect(() => {
+        fetch("https://cs571.org/rest/s25/ice/pizza", {
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId()
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            setPizza(data)
+        })
+    }, [])
+
     return <div>
         <h1>Welcome to Badger Recipes!</h1>
-        <Recipe/>
+        {pizza ? <Recipe {...pizza}/> : <p>The recipe is loading</p>}
     </div>
 }
