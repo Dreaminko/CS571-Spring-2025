@@ -131,3 +131,137 @@ In addition to the numbered paginated items, add "Previous" and "Next" buttons. 
 ### Done! 🥳
 
 Congrats! Add, commit, and push your files to GitHub Classroom and paste your commit hash in the Canvas assignment.
+
+---
+
+# CS571-S25 HW4: Badger Book (React!)
+
+欢迎回到 Badger Book -- React 版本！在 HW0 中，我们收集了关于您的 JSON 数据；在 HW2 中我们使用原生 HTML、CSS 和 JS 实现了 Badger Book；在这个作业中，您将创建一个 React App 版本的 Badger Book。就像在过去的作业中一样，您将从 API 获取数据，在网页上呈现它，并提供搜索功能来加速介绍过程！
+
+## 设置
+
+提供给您的起始代码是使用 [vite](https://vitejs.dev/guide/) 生成的。此外，[bootstrap](https://www.npmjs.com/package/bootstrap) 和 [react-bootstrap](https://www.npmjs.com/package/react-bootstrap) 已经安装好了。在这个目录下，只需运行...
+
+```bash
+npm install
+npm run dev
+```
+
+然后在浏览器中打开 `localhost:5173`。您应该*不要*在浏览器中直接打开 index.html；React 的工作方式与传统的网页编程不同！当您保存更改时，它们会自动出现在浏览器中。我推荐使用 [Visual Studio Code](https://code.visualstudio.com/) 进行开发工作。
+
+您将要工作的两个组件位于 `components` 文件夹中。我已经为 `Student.jsx` 和 `Classroom.jsx` 创建了框架。classroom 组件应该从 API 获取所有数据并将它们显示为 student 组件。
+
+## 重要提醒
+ - 下面的截图只是示例；学生数量和学生数据会因学期而异。
+ - 学生的顺序*不*保证。它会偶尔改变。这是可以的；您的解决方案*不*需要保持学生的顺序。
+ - 每个学生都有一个保证唯一的 `id`。
+
+最后，点击兴趣来搜索它*不是*这次作业的要求。我们将有一套不同的要求，比如自动搜索、重置搜索和分页。
+
+## 任务
+
+### 1. 获取学生数据
+
+在 `Classroom.jsx` 中，创建一个 React 状态变量来保存学生数据数组。然后，在*页面加载时*从 `https://cs571api.cs.wisc.edu/rest/s25/hw4/students` 获取学生数据并将其保存到这个 React 状态变量中。注意三点...
+ 1. 您可能需要使用 React hooks `useEffect` 和 `useState`。
+ 2. 这与 HW2 API 的数据相同，*除了*每个学生都添加了一个额外的唯一"id"。
+ 3. 此请求需要一个指定您唯一 Badger ID 的 `X-CS571-ID` 头。
+ 
+获取此数据后，`console.log` 这个数组的内容。
+
+**提示：** 您从服务器收到了 [429 HTTP 代码](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) 吗？检查您的代码是否有无限循环！您将被自动锁定在 API 之外长达 1 分钟。
+
+![](_figures/step1.png)
+
+### 2. 显示学生数量
+
+在 `Classroom.jsx` 中，在搜索表单下方显示返回的学生数量；例如...
+
+```
+有 NUMBER 名学生符合您的搜索条件。
+```
+
+![](_figures/step2.png)
+
+### 3. 显示学生姓名
+
+在 `Classroom.jsx` 中，为每个学生显示一个 `Student` 组件，传递学生数据的 props。您必须使用 `Student` 组件显示学生的数据。
+
+此外，确保为每个学生指定一个唯一的 `key`；您应该使用学生的 ID 作为 key。您应该确保在浏览器的控制台日志中**没有**收到说 `each child in a list should have a unique "key" prop.` 的错误，否则您将失分！
+
+![](_figures/step3.png)
+
+### 4. 格式化学生数据
+
+这"可以工作"...但在大型设备上有很多浪费的空间。在 `Classroom.jsx` 中，使用 [React-Bootstrap 的网格系统](https://react-bootstrap.github.io/layout/grid/)，使得...
+ - 在 `xs` 和 `sm` 设备上显示 1 列学生
+ - 在 `md` 设备上显示 2 列学生
+ - 在 `lg` 设备上显示 3 列学生
+ - 在 `xl` 设备上显示 4 列学生
+
+您可以调整浏览器窗口大小来测试这一点。
+
+![](_figures/step4.png)
+
+### 5. 添加其他学生数据
+
+学生不仅仅有姓名！修改 `Student.jsx` 以显示学生的所有其他信息（除了他们的 ID）。您如何选择这样做取决于您，但您必须显示...
+ - 姓和名
+ - 专业
+ - 学分数
+ - 是否来自威斯康星州
+ - 他们的兴趣作为**无序列表** (`ul`)
+
+此外，确保为每个兴趣指定一个唯一的 `key`；您可以假设每个兴趣对每个人来说都是唯一的。您应该确保在浏览器的控制台日志中**没有**收到说 `each child in a list should have a unique "key" prop.` 的错误，否则您将失分！
+
+![](_figures/step5.png)
+
+### 6. 搜索功能
+
+显示了所有数据后，我们需要为用户提供缩小结果范围的方法。实现搜索功能，使用户可以按姓名、专业和兴趣进行搜索，结果**在他们输入时**出现 -- *没有搜索按钮*。只有符合输入搜索条件的学生才应该显示。
+
+**提示**：您可能需要创建一个包含从完整学生列表*派生的*搜索学生列表的变量。
+
+如何在 React 中实现这一点取决于您，但搜索功能的以下要求**(这些与 HW2 中的相同)**...
+ - 搜索词不区分大小写，例如搜索"cat"应该产生包含"cAT"的结果
+ - 搜索词是子字符串，例如"olo"应该产生包含"color"的结果
+ - 搜索词是 AND 表达式，例如搜索姓名"Cole"、专业"Computer Science"和兴趣"coffee"应该只产生研究计算机科学并对咖啡感兴趣的 Cole
+ - 搜索"john"、"smith"、"john smith"或"ohn smi"，都应该产生名为"John Smith"的人
+   - 您可以通过用空格连接每个人的姓和名来实现这一点；如果搜索名称是此连接的子字符串，则它是匹配的
+ - 如果任何兴趣匹配搜索词，它应该被视为结果，例如搜索"bow"应该产生对"bow hunting"、"bowling"或"formal bowing"感兴趣的人。
+ - 如果搜索词留空，它不应该影响搜索结果
+ - 搜索词的前导和尾随空格应该被忽略
+
+我*鼓励*但不*要求*您使用声明式而非命令式编程。
+
+**重要：** 显示的结果数量（见步骤 2）也应该更新以反映找到的学生数量。
+
+![](_figures/step6.png)
+
+### 7. 重置搜索
+
+在 `Classroom.jsx` 中，添加一个 `onClick` 处理程序，这样当用户点击"Reset Search"按钮时，搜索词字段应该被清除，所有学生都应该显示。
+
+**重要：** 显示的结果数量（见步骤 2）也应该更新以反映学生总数。
+
+![](_figures/step7.png)
+
+### 8. 基本分页
+
+[使用 Bootstrap 实现分页](https://react-bootstrap.netlify.app/docs/components/pagination/)。
+
+每页应显示最多 24 个结果。允许用户通过页面底部的编号分页项目（例如 1、2、3、4 等）在页面之间切换。通过将该分页项目标记为活动来指示用户当前所在的页面。当任何搜索词更新时，或者如果搜索被重置，将用户返回到第 1 页。
+
+**注意**：您应该*动态*创建 `Pagination.Item` 组件。随着搜索结果数量的更新，`Pagination.Item` 的数量也应该更新。确保为每个 `Pagination.Item` 指定一个唯一的 `key`。
+
+![](_figures/step8.png)
+
+### 9. 下一页和上一页按钮
+
+除了编号的分页项目，还要添加"Previous"和"Next"按钮。如果用户在第一页，"Previous"按钮应该被禁用，如果用户在最后一页，"Next"按钮应该被禁用。如果没有结果，两个按钮都应该被禁用。
+
+![](_figures/step9.png)
+
+### 完成！🥳
+
+恭喜！添加、提交并推送您的文件到 GitHub Classroom，并在 Canvas 作业中粘贴您的提交哈希。

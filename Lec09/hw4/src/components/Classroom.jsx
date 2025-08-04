@@ -1,6 +1,21 @@
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Container, Form, Row, Pagination } from "react-bootstrap";
+import Student from "./Student";
 
 const Classroom = () => {
+    const [students, setStudents] = useState([])
+    const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        fetch("https://cs571.org/rest/s25/hw4/students", {
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId()
+            }
+        })
+        .then(res => res.json())
+        .then(data => setStudents(data))
+    }, [])
+
     return <div>
         <h1>Badger Book</h1>
         <p>Search for students below!</p>
@@ -17,9 +32,16 @@ const Classroom = () => {
         </Form>
         <Container fluid>
             <Row>
-                { /* TODO Students go here! */ }
+                {students.map((student) => (
+                    <Student key={student.id} {...student} />
+                ))}
             </Row>
         </Container>
+
+        <Pagination>
+
+        </Pagination>
+
     </div>
 
 }
