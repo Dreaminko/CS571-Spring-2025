@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form, Row, Pagination } from "react-bootstrap";
+import { Button, Container, Form, Row, Col, Pagination } from "react-bootstrap";
 import Student from "./Student";
 
 const Classroom = () => {
     const [students, setStudents] = useState([])
+    const [matches, setMatches] = useState(0)
+    
+    const [searchName, setSearchName] = useState("")
+    const [searchMajor, setSearchMajor] = useState("")
+    const [searchInterest, setSearchInterest] = useState("")
+
     const [page, setPage] = useState(1)
 
     useEffect(() => {
@@ -13,8 +19,17 @@ const Classroom = () => {
             }
         })
         .then(res => res.json())
-        .then(data => setStudents(data))
+        .then(data => {
+            setStudents(data)
+            setMatches(data.length)
+        })
     }, [])
+
+    const searchStudents = () => {
+        return students.filter(student => {
+            
+        })
+    }
 
     return <div>
         <h1>Badger Book</h1>
@@ -22,26 +37,30 @@ const Classroom = () => {
         <hr />
         <Form>
             <Form.Label htmlFor="searchName">Name</Form.Label>
-            <Form.Control id="searchName"/>
+            <Form.Control id="searchName" value={searchName} onChange={(e) => setSearchName(e.target.value)}/>
             <Form.Label htmlFor="searchMajor">Major</Form.Label>
-            <Form.Control id="searchMajor"/>
+            <Form.Control id="searchMajor" value={searchMajor} onChange={(e) => setSearchMajor(e.target.value)}/>
             <Form.Label htmlFor="searchInterest">Interest</Form.Label>
-            <Form.Control id="searchInterest"/>
+            <Form.Control id="searchInterest" value={searchInterest} onChange={(e) => setSearchInterest(e.target.value)}/>
             <br />
-            <Button variant="neutral">Reset Search</Button>
+            <Button variant="neutral" onClick={() => {
+                setSearchName("")
+                setSearchMajor("")
+                setSearchInterest("")
+            }}>Reset Search</Button>
         </Form>
+
+        <p>There are {matches} student(s) matching your search.</p>
+
         <Container fluid>
             <Row>
-                {students.map((student) => (
-                    <Student key={student.id} {...student} />
-                ))}
+                {students.map((student) => 
+                    <Col key={student.id} xs={1} sm={1} md={2} lg={3} xl={4}>
+                        <Student {...student} />
+                    </Col>
+                )}
             </Row>
         </Container>
-
-        <Pagination>
-
-        </Pagination>
-
     </div>
 
 }
